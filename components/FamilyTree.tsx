@@ -30,13 +30,15 @@ function buildForest(members: Member[]): TreeNode[] {
   // roots = no parent in dataset
   const roots = members.filter((m) => !hasParent.has(m.id));
 
-  // remove spouses from roots (they appear as couples)
-  const rootSpouseIds = new Set(
-    roots
-      .filter((m) => m.spouseId && byId.has(m.spouseId) && !hasParent.has(m.spouseId!))
-      .map((m) => m.spouseId!)
-  );
-  const primaryRoots = roots.filter((m) => !rootSpouseIds.has(m.id));
+  // Keep only true root nodes:
+  // - If spouse has parents in dataset → this person is "married-in", exclude (appears as couple)
+  // - If both have no parents (couple at top) → keep only one (smaller ID wins to deduplicate)
+  const primaryRoots = roots.filter((m) => {
+    const spouse = m.spouseId ? byId.get(m.spouseId) : undefined;
+    if (!spouse) return true;
+    if (hasParent.has(spouse.id)) return false; // married-in: exclude
+    return m.id < spouse.id; // both are roots: keep only one
+  });
 
   const visited = new Set<string>();
 

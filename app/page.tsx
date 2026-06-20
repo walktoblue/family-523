@@ -40,7 +40,6 @@ export default function Home() {
   }
 
   const avatarEmoji = (m: Member) => {
-    if (m.photoUrl) return null;
     const age = m.birthYear ? new Date().getFullYear() - m.birthYear : 30;
     if (m.gender === "male") return age > 60 ? "👴" : age > 30 ? "👨" : "👦";
     return age > 60 ? "👵" : age > 30 ? "👩" : "👧";
@@ -138,10 +137,31 @@ export default function Home() {
             </div>
           ) : (
             <>
-              {/* Chonsu + name */}
+              {/* Profile photo + relationship */}
               <div className="flex flex-col items-center text-center">
+                {result.toMember && (
+                  <div
+                    className="w-24 h-24 squircle mx-auto mb-4 flex items-center justify-center text-5xl overflow-hidden shadow-md"
+                    style={{ background: "var(--primary-fixed)" }}
+                  >
+                    {result.toMember.photoUrl ? (
+                      <img
+                        src={result.toMember.photoUrl}
+                        alt={result.toMember.name}
+                        className="w-24 h-24 squircle object-cover"
+                      />
+                    ) : (
+                      <span>{avatarEmoji(result.toMember)}</span>
+                    )}
+                  </div>
+                )}
+                {result.toMember && (
+                  <p className="font-bold text-base mb-3" style={{ color: "var(--on-surface)" }}>
+                    {result.toMember.name}
+                  </p>
+                )}
                 <span
-                  className="px-4 py-1 rounded-full text-sm font-semibold mb-4 shadow-sm"
+                  className="px-4 py-1 rounded-full text-sm font-semibold mb-3 shadow-sm"
                   style={{ background: "var(--secondary-container)", color: "var(--on-secondary-container)" }}
                 >
                   {result.chonsu === 0 ? "배우자" : `${result.chonsu}촌`}
