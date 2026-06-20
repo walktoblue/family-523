@@ -75,9 +75,9 @@ Next.js (App Router, TypeScript) · Tailwind CSS v4 · Supabase · Vercel
 
 ## 진행 상황
 - [x] 기획 완료
-- [ ] Stitch 프로토타입
-- [ ] 연결 (GitHub · Vercel · Supabase)
-- [ ] 구현: 홈 — 관계 검색
-- [ ] 구현: 멤버 프로필
-- [ ] 구현: 관리자 — 멤버 관리
-- [ ] 배포 확인
+- [x] Stitch 프로토타입
+- [x] 연결 (GitHub · Vercel · Supabase)
+- [x] 구현: 홈 — 관계 검색
+- [x] 구현: 멤버 프로필
+- [x] 구현: 관리자 — 멤버 관리
+- [x] 배포 확인
