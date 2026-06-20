@@ -40,12 +40,12 @@ function buildForest(members: Member[]): TreeNode[] {
     return m.id < spouse.id; // both are roots: keep only one
   });
 
-  const visited = new Set<string>();
-
-  function buildNode(m: Member): TreeNode {
-    visited.add(m.id);
+  // Each root tree uses its OWN visited set so the same person (e.g. 김신균+혜은+자녀)
+  // can appear in BOTH the paternal tree (under 김병원) AND the maternal tree (under 김두옥).
+  function buildNode(m: Member, seen: Set<string>): TreeNode {
+    seen.add(m.id);
     const spouse = m.spouseId ? (byId.get(m.spouseId) ?? null) : null;
-    if (spouse) visited.add(spouse.id);
+    if (spouse) seen.add(spouse.id);
 
     const childIdSet = new Set<string>([
       ...(childrenOf.get(m.id) ?? []),
@@ -56,23 +56,30 @@ function buildForest(members: Member[]): TreeNode[] {
       .map((cid) => byId.get(cid))
       .filter(Boolean) as Member[];
 
-    // deduplicate: only one per couple (exclude spouses-of-children)
+    // deduplicate: only show one of each couple (exclude the spouse-side of children)
     const childSpouseIds = new Set(
       allChildren.filter((c) => c.spouseId).map((c) => c.spouseId!)
     );
     const primaryChildren = allChildren.filter(
-      (c) => !childSpouseIds.has(c.id) && !visited.has(c.id)
+      (c) => !childSpouseIds.has(c.id) && !seen.has(c.id)
     );
 
     return {
       id: m.id,
       member: m,
       spouse,
-      children: primaryChildren.map(buildNode),
+      children: primaryChildren.map((c) => buildNode(c, seen)),
     };
   }
 
-  return primaryRoots.filter((r) => !visited.has(r.id)).map(buildNode);
+  // Sort: 친가(paternal) first, 외가(maternal) second
+  const sorted = [...primaryRoots].sort((a, b) => {
+    const order = (s: string) =>
+      s.startsWith("paternal") ? 0 : s.startsWith("maternal") ? 1 : 2;
+    return order(a.side) - order(b.side);
+  });
+
+  return sorted.map((r) => buildNode(r, new Set<string>()));
 }
 
 function emoji(m: Member) {
