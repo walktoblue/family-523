@@ -23,6 +23,7 @@ export default function AdminPage() {
   const [editing, setEditing] = useState<Member | null>(null);
   const [isNew, setIsNew] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [msg, setMsg] = useState("");
 
   async function load() {
@@ -61,6 +62,23 @@ export default function AdminPage() {
   function set<K extends keyof Member>(field: K, value: Member[K]) {
     if (!editing) return;
     setEditing({ ...editing, [field]: value });
+  }
+
+  async function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file || !editing) return;
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.url) set("photoUrl", data.url);
+      else if (data.error) setMsg(`업로드 실패: ${data.error}`);
+    } finally {
+      setUploading(false);
+      e.target.value = "";
+    }
   }
 
   return (
@@ -194,9 +212,47 @@ export default function AdminPage() {
                   <textarea value={editing.description ?? ""} onChange={(e) => set("description", e.target.value)}
                     rows={3} className="field-input resize-none" placeholder="가족을 소개해 주세요" />
                 </Field>
-                <Field label="사진 URL">
-                  <input value={editing.photoUrl ?? ""} onChange={(e) => set("photoUrl", e.target.value)}
-                    className="field-input" placeholder="https://..." />
+                <Field label="사진">
+                  <div className="space-y-2">
+                    {editing.photoUrl && (
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={editing.photoUrl}
+                          alt="미리보기"
+                          className="w-14 h-14 squircle object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => set("photoUrl", "")}
+                          className="text-xs font-semibold"
+                          style={{ color: "var(--error)" }}
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    )}
+                    <label
+                      className="flex items-center gap-2 cursor-pointer px-3 py-2 rounded-xl border text-sm font-semibold w-fit"
+                      style={{
+                        borderColor: "var(--outline-variant)",
+                        background: "var(--surface-container-low)",
+                        color: uploading ? "var(--outline)" : "var(--on-surface-variant)",
+                        cursor: uploading ? "not-allowed" : "pointer",
+                      }}
+                    >
+                      <span className="material-symbols-outlined text-base">
+                        {uploading ? "sync" : "upload"}
+                      </span>
+                      {uploading ? "업로드 중…" : "사진 선택"}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={handlePhotoUpload}
+                        disabled={uploading}
+                      />
+                    </label>
+                  </div>
                 </Field>
                 <Field label="부모 ID (쉼표로 구분)">
                   <input value={editing.parentIds.join(",")} onChange={(e) => set("parentIds", e.target.value ? e.target.value.split(",").map(s => s.trim()) : [])}

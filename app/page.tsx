@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Member } from "@/lib/types";
+import FamilyTree from "@/components/FamilyTree";
 
 export default function Home() {
   const [myName, setMyName] = useState("");
@@ -200,47 +201,21 @@ export default function Home() {
         </div>
       )}
 
-      {/* Member grid */}
-      <div className="max-w-2xl mx-auto">
-        <h2 className="serif text-xl font-bold mb-5" style={{ color: "var(--on-surface-variant)" }}>
-          전체 가족 ({members.length}명)
-        </h2>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {members.map((m) => {
-            const emoji = avatarEmoji(m);
-            return (
-              <Link
-                key={m.id}
-                href={`/member/${m.id}`}
-                className="rounded-2xl p-5 text-center album-shadow border hover:-translate-y-1 transition-all"
-                style={{
-                  background: "var(--surface-container-lowest)",
-                  borderColor: "rgba(215,195,179,0.2)",
-                }}
-              >
-                <div
-                  className="w-16 h-16 mx-auto mb-3 flex items-center justify-center text-3xl squircle shadow-inner"
-                  style={{ background: "var(--surface-container)" }}
-                >
-                  {m.photoUrl ? (
-                    <img src={m.photoUrl} alt={m.name} className="w-16 h-16 squircle object-cover" />
-                  ) : (
-                    <span>{emoji}</span>
-                  )}
-                </div>
-                <p className="serif font-semibold text-sm" style={{ color: "var(--on-surface)" }}>{m.name}</p>
-                <div
-                  className="inline-flex items-center gap-1 mt-1.5 px-2 py-0.5 rounded-full"
-                  style={{ background: "rgba(55,104,71,0.15)" }}
-                >
-                  <span className="material-symbols-outlined text-xs" style={{ color: "var(--secondary)", fontVariationSettings: "'FILL' 1" }}>park</span>
-                  <span className="text-xs font-semibold" style={{ color: "var(--secondary)" }}>{m.role}</span>
-                </div>
-              </Link>
-            );
-          })}
+      {/* Family tree */}
+      {members.length > 0 && (
+        <div>
+          <h2
+            className="serif text-xl font-bold mb-6 text-center"
+            style={{ color: "var(--on-surface-variant)" }}
+          >
+            우리 가족 가계도
+          </h2>
+          <FamilyTree members={members} />
+          <p className="text-center text-xs mt-4" style={{ color: "var(--outline)" }}>
+            이름을 누르면 프로필을 볼 수 있어요
+          </p>
         </div>
-      </div>
+      )}
     </main>
   );
 }
