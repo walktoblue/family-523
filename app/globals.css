@@ -1,14 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fdf8f0;
-  --foreground: #2d1f0f;
-  --primary: #c17f3a;
-  --primary-light: #f0e0c0;
-  --card: #ffffff;
-  --text-muted: #7a5c3a;
-  --border: #e5d5b8;
-  --accent: #4a7c59;
+  --background: #fef9f1;
+  --foreground: #1d1c17;
+
+  --primary: #864f0a;
+  --primary-btn: #c17f3a;
+  --primary-container: #a46723;
+  --primary-fixed: #ffdcbf;
+  --primary-fixed-dim: #ffb873;
+
+  --secondary: #376847;
+  --secondary-container: #b6edc2;
+  --on-secondary-container: #3b6d4b;
+
+  --tertiary: #825024;
+  --tertiary-container: #9f683a;
+
+  --surface: #fef9f1;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f8f3eb;
+  --surface-container: #f2ede5;
+  --surface-container-high: #ece8e0;
+  --surface-container-highest: #e7e2da;
+
+  --on-surface: #1d1c17;
+  --on-surface-variant: #524438;
+  --outline: #847467;
+  --outline-variant: #d7c3b3;
+
+  --error: #ba1a1a;
+
+  --album-shadow: 0 4px 20px rgba(193, 127, 58, 0.08);
 }
 
 @theme inline {
@@ -19,9 +42,18 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  font-family: "Plus Jakarta Sans", "Noto Sans KR", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1, h2, h3 {
-  font-family: "Noto Serif KR", "Apple SD Gothic Neo", serif;
+h1, h2, h3, .serif {
+  font-family: "Noto Serif KR", "Noto Serif", serif;
+}
+
+.squircle {
+  border-radius: 24%;
+}
+
+.album-shadow {
+  box-shadow: var(--album-shadow);
 }

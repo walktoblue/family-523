@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>우리 가족 찾기 - 홈</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#b6edc2",
+                    "surface-dim": "#ded9d2",
+                    "surface-variant": "#e7e2da",
+                    "on-surface": "#1d1c17",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#ece8e0",
+                    "on-surface-variant": "#524438",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#ffb873",
+                    "tertiary-container": "#9f683a",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#2f1500",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#fcb883",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#d7c3b3",
+                    "tertiary": "#825024",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#3b6d4b",
+                    "surface-bright": "#fef9f1",
+                    "surface-container": "#f2ede5",
+                    "primary-fixed-dim": "#ffb873",
+                    "on-background": "#1d1c17",
+                    "primary-container": "#a46723",
+                    "inverse-surface": "#32302b",
+                    "on-secondary-fixed": "#00210e",
+                    "on-secondary-fixed-variant": "#1e5031",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#9dd3aa",
+                    "surface": "#fef9f1",
+                    "on-primary-fixed": "#2d1600",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-low": "#f8f3eb",
+                    "on-tertiary-fixed-variant": "#693c11",
+                    "primary": "#864f0a",
+                    "inverse-on-surface": "#f5f0e8",
+                    "secondary": "#376847",
+                    "primary-fixed": "#ffdcbf",
+                    "secondary-fixed": "#b9efc5",
+                    "tertiary-fixed": "#ffdcc3",
+                    "background": "#fef9f1",
+                    "surface-container-highest": "#e7e2da",
+                    "on-primary-fixed-variant": "#6a3b00",
+                    "outline": "#847467",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-tint": "#89510d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1200px",
+                    "md": "24px",
+                    "lg": "40px",
+                    "base": "8px",
+                    "xl": "64px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "gutter": "20px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Noto Serif"],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Noto Serif"],
+                    "headline-lg-mobile": ["Noto Serif"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["Noto Serif"],
+                    "caption": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["40px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-sm": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #FDF8F0;
+            color: #1d1c17;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .serif {
+            font-family: 'Noto Serif', serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .connection-line {
+            position: relative;
+        }
+        .connection-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -12px;
+            width: 8px;
+            height: 1px;
+            background-color: #d7c3b3;
+        }
+        .paper-texture {
+            background-image: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen pb-24 md:pb-0">
+<!-- TopNavBar -->
+<header class="bg-surface dark:bg-surface-container-highest shadow-sm h-20 sticky top-0 z-40">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto h-20">
+<div class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed-dim">우리가족 찾기</div>
+<nav class="hidden md:flex items-center gap-lg">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 font-label-md text-label-md" href="#">가계도</a>
+<a class="text-on-surface-variant dark:text-outline hover:text-primary transition-colors font-label-md text-label-md" href="#">가족 찾기</a>
+<a class="text-on-surface-variant dark:text-outline hover:text-primary transition-colors font-label-md text-label-md" href="#">추억함</a>
+<a class="text-on-surface-variant dark:text-outline hover:text-primary transition-colors font-label-md text-label-md" href="#">관리자</a>
+</nav>
+<div class="flex items-center gap-sm">
+<button class="p-2 hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-all rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary">notifications</span>
+</button>
+<button class="p-2 hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-all rounded-full active:scale-95 duration-150">
+<span class="material-symbols-outlined text-primary">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-container-max mx-auto px-lg py-xl md:py-24">
+<!-- Hero Section -->
+<div class="flex flex-col items-center text-center mb-16">
+<div class="text-6xl mb-6 transform hover:scale-110 transition-transform cursor-default">🌳</div>
+<h1 class="font-headline-lg text-headline-lg md:text-headline-lg-mobile mb-4 serif text-on-surface">우리 가족 찾기</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md">이름을 입력하면 어떤 관계인지 알려드려요</p>
+</div>
+<!-- Search Card -->
+<div class="max-w-2xl mx-auto mb-20">
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0_4px_20px_rgba(193,127,58,0.08)] paper-texture border border-outline-variant/30">
+<div class="flex flex-col md:flex-row items-center gap-4 mb-8">
+<div class="w-full relative">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">내 이름</label>
+<input class="w-full bg-surface-container-low border-2 border-outline-variant rounded-lg px-4 py-3 focus:border-primary focus:ring-0 transition-all font-body-md text-body-md" placeholder="김로이" type="text"/>
+</div>
+<div class="flex items-center justify-center p-2 mt-6">
+<span class="material-symbols-outlined text-primary-container font-bold text-2xl cursor-pointer hover:rotate-180 transition-transform duration-500">swap_vert</span>
+</div>
+<div class="w-full">
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">상대방 이름</label>
+<input class="w-full bg-surface-container-low border-2 border-outline-variant rounded-lg px-4 py-3 focus:border-primary focus:ring-0 transition-all font-body-md text-body-md" placeholder="김진유" type="text"/>
+</div>
+</div>
+<button class="w-full bg-[#C17F3A] hover:bg-primary-container text-white font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all transform active:scale-[0.98] text-body-lg font-body-lg">
+                    관계 알아보기
+                </button>
+</div>
+</div>
+<!-- Result Section -->
+<div class="max-w-4xl mx-auto space-y-12">
+<div class="flex flex-col items-center text-center animate-in fade-in slide-in-from-bottom-4 duration-700">
+<span class="bg-secondary-container text-on-secondary-container px-4 py-1 rounded-full font-label-md text-label-md mb-4 shadow-sm">4촌</span>
+<h2 class="font-headline-md text-headline-md serif mb-4">사촌</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">신균님의 아들과 진유님의 관계입니다.</p>
+</div>
+<!-- Connection Path -->
+<div class="flex flex-wrap justify-center items-center gap-3 py-6">
+<div class="bg-surface-container-high px-4 py-2 rounded-full font-label-md text-label-md text-on-surface shadow-sm hover:scale-105 transition-transform cursor-default">김로이</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">arrow_forward</span>
+<div class="bg-surface-container-high px-4 py-2 rounded-full font-label-md text-label-md text-on-surface shadow-sm hover:scale-105 transition-transform cursor-default">김신균</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">arrow_forward</span>
+<div class="bg-primary-container text-white px-4 py-2 rounded-full font-label-md text-label-md shadow-md hover:scale-105 transition-transform cursor-default">김병원</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">arrow_forward</span>
+<div class="bg-surface-container-high px-4 py-2 rounded-full font-label-md text-label-md text-on-surface shadow-sm hover:scale-105 transition-transform cursor-default">김대균</div>
+<span class="material-symbols-outlined text-outline-variant text-sm">arrow_forward</span>
+<div class="bg-surface-container-high px-4 py-2 rounded-full font-label-md text-label-md text-on-surface shadow-sm hover:scale-105 transition-transform cursor-default">김진유</div>
+</div>
+<!-- Bottom Grid (Avatar Cards) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter mt-16">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(193,127,58,0.08)] hover:translate-y-[-4px] transition-all border border-outline-variant/20 flex flex-col items-center text-center">
+<div class="w-20 h-20 mb-4 bg-surface-container rounded-2xl flex items-center justify-center text-4xl shadow-inner">👴</div>
+<h3 class="font-headline-sm text-headline-sm serif text-on-surface">김병원</h3>
+<div class="mt-2 inline-flex items-center gap-1 bg-secondary-container/30 px-3 py-1 rounded-full text-secondary text-caption font-caption">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">park</span>
+                        할아버지
+                    </div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(193,127,58,0.08)] hover:translate-y-[-4px] transition-all border border-outline-variant/20 flex flex-col items-center text-center">
+<div class="w-20 h-20 mb-4 bg-surface-container rounded-2xl flex items-center justify-center text-4xl shadow-inner">👨</div>
+<h3 class="font-headline-sm text-headline-sm serif text-on-surface">김신균</h3>
+<div class="mt-2 inline-flex items-center gap-1 bg-secondary-container/30 px-3 py-1 rounded-full text-secondary text-caption font-caption">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">park</span>
+                        큰아버지
+                    </div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_4px_20px_rgba(193,127,58,0.08)] hover:translate-y-[-4px] transition-all border border-outline-variant/20 flex flex-col items-center text-center">
+<div class="w-20 h-20 mb-4 bg-surface-container rounded-2xl flex items-center justify-center text-4xl shadow-inner">👦</div>
+<h3 class="font-headline-sm text-headline-sm serif text-on-surface">김로이</h3>
+<div class="mt-2 inline-flex items-center gap-1 bg-secondary-container/30 px-3 py-1 rounded-full text-secondary text-caption font-caption">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">park</span>
+                        본인
+                    </div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full px-lg md:px-xl max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-center gap-base py-12 bg-surface-container-low dark:bg-surface-container-highest border-t border-outline-variant mt-24">
+<div class="text-headline-sm font-headline-sm text-primary serif">우리 가족 찾기</div>
+<div class="flex gap-lg">
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary hover:underline transition-all opacity-80 hover:opacity-100" href="#">이용약관</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary hover:underline transition-all opacity-80 hover:opacity-100" href="#">개인정보처리방침</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary hover:underline transition-all opacity-80 hover:opacity-100" href="#">도움말</a>
+</div>
+<div class="text-body-md font-body-md text-on-surface-variant dark:text-surface-variant">© 2024 우리 가족 찾기. All rights reserved.</div>
+</footer>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-surface dark:bg-surface-container-lowest shadow-[0_-4px_20px_rgba(193,127,58,0.08)] rounded-t-xl">
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full p-2 w-12 h-12 scale-90 duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-[10px] font-caption">홈</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="text-[10px] font-caption">가계도</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-[10px] font-caption">메시지</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high transition-all">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px] font-caption">설정</span>
+</button>
+</nav>
+<script>
+        // Micro-interactions
+        document.querySelectorAll('button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.classList.add('scale-95');
+                setTimeout(() => this.classList.remove('scale-95'), 150);
+            });
+        });
+
+        // Simple animation on scroll
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-10');
+            observer.observe(el);
+        });
+    </script>
+</body></html>

@@ -1,22 +1,24 @@
 import type { Metadata } from "next";
-import { Noto_Serif_KR, Noto_Sans_KR } from "next/font/google";
+import { Noto_Serif_KR, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
+import TopNav from "@/components/TopNav";
 
 const notoSerif = Noto_Serif_KR({
   variable: "--font-noto-serif",
   subsets: ["latin"],
-  weight: ["400", "700"],
+  weight: ["400", "600", "700"],
 });
 
-const notoSans = Noto_Sans_KR({
-  variable: "--font-noto-sans",
+const plusJakarta = Plus_Jakarta_Sans({
+  variable: "--font-plus-jakarta",
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
+// Material Symbols is loaded via <link> in the head
 export const metadata: Metadata = {
-  title: "우리 가족 — 523 패밀리",
-  description: "가족 관계를 알아보세요",
+  title: "우리 가족 찾기 · 523 패밀리",
+  description: "이름을 입력하면 어떤 관계인지 알려드려요",
 };
 
 export default function RootLayout({
@@ -25,8 +27,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={`${notoSerif.variable} ${notoSans.variable} h-full`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="ko" className={`${notoSerif.variable} ${plusJakarta.variable}`}>
+      <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+      </head>
+      <body className="min-h-screen pb-20 md:pb-0" style={{ background: "var(--background)", color: "var(--foreground)" }}>
+        <TopNav />
+        {children}
+      </body>
     </html>
   );
 }

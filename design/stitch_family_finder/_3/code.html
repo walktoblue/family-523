@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="light" lang="ko"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>멤버 프로필 - 우리 가족 찾기</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "secondary-container": "#b6edc2",
+                    "surface-dim": "#ded9d2",
+                    "surface-variant": "#e7e2da",
+                    "on-surface": "#1d1c17",
+                    "error": "#ba1a1a",
+                    "surface-container-high": "#ece8e0",
+                    "on-surface-variant": "#524438",
+                    "error-container": "#ffdad6",
+                    "inverse-primary": "#ffb873",
+                    "tertiary-container": "#9f683a",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed": "#2f1500",
+                    "on-secondary": "#ffffff",
+                    "tertiary-fixed-dim": "#fcb883",
+                    "on-tertiary": "#ffffff",
+                    "outline-variant": "#d7c3b3",
+                    "tertiary": "#825024",
+                    "on-primary": "#ffffff",
+                    "on-secondary-container": "#3b6d4b",
+                    "surface-bright": "#fef9f1",
+                    "surface-container": "#f2ede5",
+                    "primary-fixed-dim": "#ffb873",
+                    "on-background": "#1d1c17",
+                    "primary-container": "#a46723",
+                    "inverse-surface": "#32302b",
+                    "on-secondary-fixed": "#00210e",
+                    "on-secondary-fixed-variant": "#1e5031",
+                    "surface-container-lowest": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed-dim": "#9dd3aa",
+                    "surface": "#fef9f1",
+                    "on-primary-fixed": "#2d1600",
+                    "on-primary-container": "#fffbff",
+                    "surface-container-low": "#f8f3eb",
+                    "on-tertiary-fixed-variant": "#693c11",
+                    "primary": "#864f0a",
+                    "inverse-on-surface": "#f5f0e8",
+                    "secondary": "#376847",
+                    "primary-fixed": "#ffdcbf",
+                    "secondary-fixed": "#b9efc5",
+                    "tertiary-fixed": "#ffdcc3",
+                    "background": "#fef9f1",
+                    "surface-container-highest": "#e7e2da",
+                    "on-primary-fixed-variant": "#6a3b00",
+                    "outline": "#847467",
+                    "on-tertiary-container": "#fffbff",
+                    "surface-tint": "#89510d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1200px",
+                    "md": "24px",
+                    "lg": "40px",
+                    "base": "8px",
+                    "xl": "64px",
+                    "xs": "4px",
+                    "sm": "12px",
+                    "gutter": "20px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Plus Jakarta Sans"],
+                    "headline-lg": ["Noto Serif"],
+                    "label-md": ["Plus Jakarta Sans"],
+                    "headline-sm": ["Noto Serif"],
+                    "headline-lg-mobile": ["Noto Serif"],
+                    "body-md": ["Plus Jakarta Sans"],
+                    "headline-md": ["Noto Serif"],
+                    "caption": ["Plus Jakarta Sans"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg": ["40px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                    "headline-sm": ["22px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg-mobile": ["30px", {"lineHeight": "38px", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-md": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .hanji-texture {
+            background-image: radial-gradient(circle at 2px 2px, rgba(193, 127, 58, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+        }
+        .profile-card-shadow {
+            box-shadow: 0 4px 20px rgba(193, 127, 58, 0.08);
+        }
+        body {
+            background-color: #FDF8F0; /* Cream background level 0 */
+        }
+    </style>
+</head>
+<body class="font-body-md text-on-surface hanji-texture min-h-screen pb-32">
+<!-- TopAppBar -->
+<header class="bg-surface shadow-sm sticky top-0 z-50 h-20 flex items-center">
+<div class="flex justify-between items-center w-full px-lg md:px-xl max-w-container-max mx-auto">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-transform active:scale-95" onclick="window.history.back()">
+<span class="material-symbols-outlined">arrow_back</span>
+</button>
+<h1 class="text-headline-md font-headline-md font-bold text-primary">우리 가족 찾기</h1>
+</div>
+<nav class="hidden md:flex items-center gap-base">
+<a class="px-4 py-2 text-on-surface-variant dark:text-outline hover:text-primary transition-colors text-label-md font-label-md" href="#">가계도</a>
+<a class="px-4 py-2 text-primary font-bold border-b-2 border-primary pb-1 text-label-md font-label-md" href="#">가족 찾기</a>
+<a class="px-4 py-2 text-on-surface-variant dark:text-outline hover:text-primary transition-colors text-label-md font-label-md" href="#">추억함</a>
+<a class="px-4 py-2 text-on-surface-variant dark:text-outline hover:text-primary transition-colors text-label-md font-label-md" href="#">관리자</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low p-2 rounded-full transition-all">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<main class="max-w-2xl mx-auto px-4 mt-8 space-y-6">
+<!-- Profile Header Section -->
+<section class="bg-surface-container-lowest rounded-xl p-8 profile-card-shadow text-center">
+<div class="relative inline-block mb-4">
+<div class="w-32 h-32 rounded-full bg-primary-container flex items-center justify-center text-6xl mx-auto border-4 border-surface shadow-md">
+                    👨‍💻
+                </div>
+<div class="absolute bottom-0 right-0 bg-secondary text-on-secondary px-3 py-1 rounded-full text-xs font-bold shadow-sm">
+                    Active
+                </div>
+</div>
+<div class="space-y-1">
+<h2 class="text-headline-lg font-headline-lg text-primary">김지훈</h2>
+<div class="flex items-center justify-center gap-2 mt-2">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-label-md font-label-md">삼촌</span>
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-label-md font-label-md">친가</span>
+</div>
+</div>
+<!-- Info Row -->
+<div class="flex justify-center gap-3 mt-6">
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary text-lg">calendar_today</span>
+<span class="text-body-md font-medium">1985년</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-4 py-2 rounded-full border border-outline-variant/30">
+<span class="material-symbols-outlined text-primary text-lg">work</span>
+<span class="text-body-md font-medium">엔지니어</span>
+</div>
+</div>
+</section>
+<!-- Biography Section -->
+<section class="bg-surface-container-lowest rounded-xl p-8 profile-card-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">history_edu</span>
+<h3 class="text-headline-sm font-headline-sm">소개</h3>
+</div>
+<p class="text-body-md text-on-surface-variant leading-relaxed">
+                가족의 기술적인 멘토이자 따뜻한 조언자입니다. 현재 IT 솔루션 아키텍트로 근무하며, 주말에는 조카들과 함께 드론 비행을 즐깁니다. 가풍을 중요시하며 매년 명절마다 가족 사진을 기록하는 것을 좋아합니다.
+            </p>
+</section>
+<!-- Interests Section -->
+<section class="bg-surface-container-lowest rounded-xl p-8 profile-card-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">favorite</span>
+<h3 class="text-headline-sm font-headline-sm">관심사</h3>
+</div>
+<div class="flex flex-wrap gap-3">
+<span class="bg-tertiary-container text-on-tertiary-container px-4 py-2 rounded-xl text-body-md font-semibold transition-transform hover:scale-105 cursor-default">독서</span>
+<span class="bg-secondary-container text-on-secondary-container px-4 py-2 rounded-xl text-body-md font-semibold transition-transform hover:scale-105 cursor-default">여행</span>
+<span class="bg-primary-container text-on-primary-container px-4 py-2 rounded-xl text-body-md font-semibold transition-transform hover:scale-105 cursor-default">요리</span>
+<span class="bg-surface-container-highest text-on-surface-variant px-4 py-2 rounded-xl text-body-md font-semibold transition-transform hover:scale-105 cursor-default">드론</span>
+</div>
+</section>
+<!-- Family Relations Section -->
+<section class="bg-surface-container-lowest rounded-xl p-8 profile-card-shadow">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary">account_tree</span>
+<h3 class="text-headline-sm font-headline-sm">가족 관계</h3>
+</div>
+<div class="space-y-6">
+<!-- Parents -->
+<div>
+<h4 class="text-label-md font-label-md text-outline mb-2 flex items-center gap-1">부모 <span class="text-[10px] opacity-50">Parents</span></h4>
+<div class="flex flex-wrap gap-2">
+<button class="flex items-center gap-2 bg-surface-container border border-outline-variant px-4 py-2 rounded-full hover:bg-surface-container-high transition-all group">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-body-md">김성수 (부)</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container border border-outline-variant px-4 py-2 rounded-full hover:bg-surface-container-high transition-all group">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="text-body-md">이영희 (모)</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Spouse -->
+<div>
+<h4 class="text-label-md font-label-md text-outline mb-2 flex items-center gap-1">배우자 <span class="text-[10px] opacity-50">Spouse</span></h4>
+<div class="flex flex-wrap gap-2">
+<button class="flex items-center gap-2 bg-secondary-container/20 border border-secondary/30 px-4 py-2 rounded-full hover:bg-secondary-container/30 transition-all group">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="text-body-md text-secondary-fixed-dim">박소영</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity text-secondary">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Children -->
+<div>
+<h4 class="text-label-md font-label-md text-outline mb-2 flex items-center gap-1">자녀 <span class="text-[10px] opacity-50">Children</span></h4>
+<div class="flex flex-wrap gap-2">
+<button class="flex items-center gap-2 bg-tertiary-container/10 border border-tertiary/20 px-4 py-2 rounded-full hover:bg-tertiary-container/20 transition-all group">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-body-md text-tertiary">김민재</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity text-tertiary">chevron_right</span>
+</button>
+<button class="flex items-center gap-2 bg-tertiary-container/10 border border-tertiary/20 px-4 py-2 rounded-full hover:bg-tertiary-container/20 transition-all group">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="text-body-md text-tertiary">김서연</span>
+<span class="material-symbols-outlined text-sm opacity-0 group-hover:opacity-100 transition-opacity text-tertiary">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Relationship Action Button -->
+<div class="pt-4 pb-12">
+<button class="w-full bg-secondary text-on-secondary py-5 rounded-xl font-bold text-lg flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all active:scale-[0.98]">
+                관계 확인하기
+                <span class="material-symbols-outlined">trending_flat</span>
+</button>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 md:hidden bg-surface dark:bg-surface-container-lowest shadow-[0_-4px_20px_rgba(193,127,58,0.08)] rounded-t-xl">
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="text-caption font-caption">홈</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full p-2 w-12 h-12 scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_tree</span>
+<span class="hidden">가계도</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">chat_bubble</span>
+<span class="text-caption font-caption">메시지</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant p-2 hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-caption font-caption">설정</span>
+</a>
+</nav>
+<!-- Footer (Desktop) -->
+<footer class="hidden md:block w-full border-t border-outline-variant bg-surface-container-low dark:bg-surface-container-highest mt-auto">
+<div class="max-w-container-max mx-auto px-lg py-12 flex flex-col md:flex-row justify-between items-center gap-base">
+<div class="flex flex-col gap-2">
+<span class="text-headline-sm font-headline-sm text-primary font-bold">우리 가족 찾기</span>
+<p class="text-body-md font-body-md text-on-surface-variant">© 2024 우리 가족 찾기. All rights reserved.</p>
+</div>
+<div class="flex gap-8">
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">이용약관</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">개인정보처리방침</a>
+<a class="text-label-md font-label-md text-on-surface-variant hover:text-primary hover:underline transition-all" href="#">도움말</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions for pills
+        document.querySelectorAll('button, span.cursor-default').forEach(el => {
+            el.addEventListener('mousedown', () => {
+                el.style.transform = 'scale(0.95)';
+            });
+            el.addEventListener('mouseup', () => {
+                el.style.transform = 'scale(1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

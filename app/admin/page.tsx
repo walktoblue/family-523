@@ -4,19 +4,19 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Member } from "@/lib/types";
 
-const EMPTY_MEMBER: Omit<Member, "id"> = {
-  name: "",
-  gender: "male",
-  side: "paternal",
-  role: "",
-  birthYear: undefined,
-  occupation: "",
-  interests: "",
-  description: "",
-  photoUrl: "",
-  parentIds: [],
-  spouseId: "",
+const EMPTY: Omit<Member, "id"> = {
+  name: "", gender: "male", side: "paternal", role: "",
+  birthYear: undefined, occupation: "", interests: "",
+  description: "", photoUrl: "", parentIds: [], spouseId: "",
 };
+
+function avatarEmoji(m: { gender: string; birthYear?: number }) {
+  const age = m.birthYear ? new Date().getFullYear() - m.birthYear : 30;
+  if (m.gender === "male") return age > 60 ? "👴" : age > 30 ? "👨" : "👦";
+  return age > 60 ? "👵" : age > 30 ? "👩" : "👧";
+}
+
+const SQUIRCLE_COLORS = ["bg-[#ffdcbf]", "bg-[#b9efc5]", "bg-[#ffdcc3]", "bg-[#e7e2da]"];
 
 export default function AdminPage() {
   const [members, setMembers] = useState<Member[]>([]);
@@ -25,226 +25,240 @@ export default function AdminPage() {
   const [saving, setSaving] = useState(false);
   const [msg, setMsg] = useState("");
 
-  async function loadMembers() {
+  async function load() {
     const res = await fetch("/api/members");
     const data = await res.json();
     setMembers(data.members);
   }
-
-  useEffect(() => { loadMembers(); }, []);
+  useEffect(() => { load(); }, []);
 
   function startNew() {
-    setEditing({ id: `member_${Date.now()}`, ...EMPTY_MEMBER });
-    setIsNew(true);
-    setMsg("");
+    setEditing({ id: `member_${Date.now()}`, ...EMPTY });
+    setIsNew(true); setMsg("");
   }
-
-  function startEdit(m: Member) {
-    setEditing({ ...m });
-    setIsNew(false);
-    setMsg("");
-  }
-
-  function cancelEdit() {
-    setEditing(null);
-    setIsNew(false);
-  }
+  function startEdit(m: Member) { setEditing({ ...m }); setIsNew(false); setMsg(""); }
+  function cancel() { setEditing(null); setIsNew(false); }
 
   async function save() {
-    if (!editing) return;
+    if (!editing || !editing.name) return;
     setSaving(true);
     try {
-      const method = isNew ? "POST" : "PUT";
       await fetch("/api/members", {
-        method,
+        method: isNew ? "POST" : "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(editing),
       });
-      await loadMembers();
-      setMsg("저장 완료!");
-      setEditing(null);
-    } finally {
-      setSaving(false);
-    }
+      await load(); setMsg("저장 완료!"); setEditing(null);
+    } finally { setSaving(false); }
   }
 
-  async function deleteMember(id: string) {
+  async function del(id: string) {
     if (!confirm("정말 삭제할까요?")) return;
-    await fetch("/api/members", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id }),
-    });
-    await loadMembers();
+    await fetch("/api/members", { method: "DELETE", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id }) });
+    await load();
   }
 
-  function updateField(field: keyof Member, value: string | string[] | number | undefined) {
+  function set<K extends keyof Member>(field: K, value: Member[K]) {
     if (!editing) return;
     setEditing({ ...editing, [field]: value });
   }
 
   return (
-    <main className="min-h-screen px-4 py-10" style={{ background: "var(--background)" }}>
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <Link href="/" className="text-sm" style={{ color: "var(--text-muted)" }}>← 홈으로</Link>
-            <h1 className="text-2xl font-bold mt-1" style={{ fontFamily: "var(--font-noto-serif)", color: "var(--primary)" }}>
-              관리자 페이지
-            </h1>
-          </div>
-          <button
-            onClick={startNew}
-            className="px-4 py-2 rounded-xl text-white text-sm font-semibold"
-            style={{ background: "var(--accent)" }}
-          >
-            + 새 가족 추가
-          </button>
+    <main className="max-w-5xl mx-auto px-5 py-8">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 mb-8">
+        <div>
+          <Link href="/" className="inline-flex items-center gap-1 text-sm mb-2" style={{ color: "var(--on-surface-variant)" }}>
+            <span className="material-symbols-outlined text-base">arrow_back</span> 홈
+          </Link>
+          <h1 className="serif text-3xl font-bold" style={{ color: "var(--primary)" }}>관리자 페이지</h1>
+          <p className="text-sm mt-1" style={{ color: "var(--on-surface-variant)" }}>
+            가족 구성원의 정보를 안전하게 관리하고 가계도를 확장하세요.
+          </p>
         </div>
+        <button
+          onClick={startNew}
+          className="flex items-center gap-2 px-6 py-3 rounded-full text-white font-bold shadow-md hover:scale-105 active:scale-95 transition-all"
+          style={{ background: "var(--secondary)" }}
+        >
+          <span className="material-symbols-outlined text-sm">person_add</span>
+          + 새 가족 추가
+        </button>
+      </div>
 
-        {msg && <p className="mb-4 text-sm text-green-700 font-medium">{msg}</p>}
+      {msg && (
+        <div className="mb-5 flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold" style={{ background: "var(--secondary-container)", color: "var(--on-secondary-container)" }}>
+          <span className="material-symbols-outlined text-base">check_circle</span> {msg}
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Member list */}
+        <div className="lg:col-span-7">
+          <div className="rounded-2xl album-shadow overflow-hidden border" style={{ background: "var(--surface-container-lowest)", borderColor: "rgba(215,195,179,0.3)" }}>
+            <div className="px-5 py-3 border-b flex justify-between items-center" style={{ background: "var(--surface-container-low)", borderColor: "rgba(215,195,179,0.3)" }}>
+              <span className="font-bold text-sm" style={{ color: "var(--on-surface-variant)" }}>
+                멤버 목록 ({members.length}명)
+              </span>
+            </div>
+            <div className="divide-y" style={{ borderColor: "rgba(215,195,179,0.2)" }}>
+              {members.map((m, i) => (
+                <div
+                  key={m.id}
+                  className="flex items-center justify-between px-5 py-4 hover:bg-[var(--surface-container-low)] transition-colors group"
+                  style={editing?.id === m.id ? { background: "rgba(255,220,191,0.2)", borderLeft: "4px solid var(--primary)" } : {}}
+                >
+                  <div className="flex items-center gap-4">
+                    <div
+                      className={`w-11 h-11 flex items-center justify-center text-xl squircle ${SQUIRCLE_COLORS[i % SQUIRCLE_COLORS.length]}`}
+                    >
+                      {m.photoUrl ? <img src={m.photoUrl} alt={m.name} className="w-11 h-11 squircle object-cover" /> : avatarEmoji(m)}
+                    </div>
+                    <div>
+                      <p className="serif font-semibold text-base" style={{ color: "var(--on-surface)" }}>{m.name}</p>
+                      <p className="text-xs" style={{ color: "var(--outline)" }}>ID: {m.id} · {m.role}</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <button
+                      onClick={() => startEdit(m)}
+                      className="px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all hover:bg-[rgba(134,79,10,0.08)]"
+                      style={{ borderColor: "var(--outline-variant)", color: "var(--primary)" }}
+                    >
+                      수정
+                    </button>
+                    <button
+                      onClick={() => del(m.id)}
+                      className="px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all hover:bg-[rgba(186,26,26,0.05)]"
+                      style={{ borderColor: "rgba(186,26,26,0.3)", color: "var(--error)" }}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Edit form */}
-        {editing && (
-          <div className="rounded-2xl p-6 mb-6" style={{ background: "var(--card)", border: "2px solid var(--primary)" }}>
-            <h2 className="font-bold text-lg mb-4" style={{ fontFamily: "var(--font-noto-serif)", color: "var(--primary)" }}>
-              {isNew ? "새 가족 추가" : `${editing.name} 수정`}
-            </h2>
-            <div className="grid grid-cols-2 gap-3 mb-3">
-              <Field label="이름 *">
-                <input value={editing.name} onChange={(e) => updateField("name", e.target.value)}
-                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-              </Field>
-              <Field label="성별 *">
-                <select value={editing.gender} onChange={(e) => updateField("gender", e.target.value as "male" | "female")}
-                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ border: "1.5px solid var(--border)", background: "var(--background)" }}>
-                  <option value="male">남자</option>
-                  <option value="female">여자</option>
-                </select>
-              </Field>
-              <Field label="계열 *">
-                <select value={editing.side} onChange={(e) => updateField("side", e.target.value)}
-                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ border: "1.5px solid var(--border)", background: "var(--background)" }}>
-                  <option value="paternal">친가</option>
-                  <option value="maternal">외가</option>
-                  <option value="both">친가 & 외가</option>
-                  <option value="paternal_in">친가 (혼인)</option>
-                  <option value="maternal_in">외가 (혼인)</option>
-                </select>
-              </Field>
-              <Field label="역할">
-                <input value={editing.role} onChange={(e) => updateField("role", e.target.value)}
-                  placeholder="예: 첫째딸, 사촌"
-                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-              </Field>
-              <Field label="출생연도">
-                <input type="number" value={editing.birthYear ?? ""} onChange={(e) => updateField("birthYear", e.target.value ? Number(e.target.value) : undefined)}
-                  placeholder="예: 1990"
-                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-              </Field>
-              <Field label="직업">
-                <input value={editing.occupation ?? ""} onChange={(e) => updateField("occupation", e.target.value)}
-                  placeholder="예: 교사, 회사원"
-                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-              </Field>
-            </div>
-            <Field label="관심사 (쉼표로 구분)">
-              <input value={editing.interests ?? ""} onChange={(e) => updateField("interests", e.target.value)}
-                placeholder="예: 독서, 여행, 요리"
-                className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-            </Field>
-            <Field label="소개">
-              <textarea value={editing.description ?? ""} onChange={(e) => updateField("description", e.target.value)}
-                rows={2} placeholder="이 가족에 대해 간단히 소개해 주세요"
-                className="w-full rounded-lg px-3 py-2 text-sm outline-none resize-none"
-                style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-            </Field>
-            <Field label="사진 URL">
-              <input value={editing.photoUrl ?? ""} onChange={(e) => updateField("photoUrl", e.target.value)}
-                placeholder="https://... 또는 /photos/이름.jpg"
-                className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-            </Field>
-            <Field label="부모 ID (쉼표로 구분)">
-              <div>
-                <input value={editing.parentIds.join(",")} onChange={(e) => updateField("parentIds", e.target.value ? e.target.value.split(",").map(s => s.trim()) : [])}
-                  placeholder="예: shingyun,hyeeun"
-                  className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                  style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-                <p className="text-xs mt-1" style={{ color: "var(--text-muted)" }}>
-                  아래 목록에서 ID 확인: {members.slice(0,5).map(m => `${m.name}(${m.id})`).join(", ")}…
-                </p>
-              </div>
-            </Field>
-            <Field label="배우자 ID">
-              <input value={editing.spouseId ?? ""} onChange={(e) => updateField("spouseId", e.target.value)}
-                placeholder="배우자의 ID 입력"
-                className="w-full rounded-lg px-3 py-2 text-sm outline-none"
-                style={{ border: "1.5px solid var(--border)", background: "var(--background)" }} />
-            </Field>
-
-            <div className="flex gap-2 mt-4">
-              <button onClick={save} disabled={saving}
-                className="px-5 py-2 rounded-xl text-white text-sm font-semibold"
-                style={{ background: "var(--primary)", opacity: saving ? 0.7 : 1 }}>
-                {saving ? "저장 중…" : "저장"}
-              </button>
-              <button onClick={cancelEdit}
-                className="px-5 py-2 rounded-xl text-sm font-semibold"
-                style={{ background: "var(--primary-light)", color: "var(--primary)" }}>
-                취소
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Member list */}
-        <div className="rounded-2xl overflow-hidden" style={{ border: "1px solid var(--border)" }}>
-          <div className="px-4 py-3" style={{ background: "var(--primary-light)" }}>
-            <span className="font-bold text-sm" style={{ color: "var(--primary)" }}>전체 가족 목록 ({members.length}명)</span>
-          </div>
-          <div className="divide-y" style={{ background: "var(--card)" }}>
-            {members.map((m) => (
-              <div key={m.id} className="flex items-center px-4 py-3 gap-3">
-                <span className="text-xl">{m.gender === "male" ? "👨" : "👩"}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm">{m.name}</p>
-                  <p className="text-xs truncate" style={{ color: "var(--text-muted)" }}>
-                    {m.role} · {m.id} {m.birthYear ? `· ${m.birthYear}년생` : ""}
+        <div className="lg:col-span-5">
+          {editing ? (
+            <div className="rounded-2xl album-shadow p-6 border-2" style={{ background: "var(--surface-container-lowest)", borderColor: "var(--primary-btn)" }}>
+              <h2 className="serif text-xl font-bold mb-5" style={{ color: "var(--primary)" }}>
+                {isNew ? "새 가족 추가" : `${editing.name || "…"} 수정`}
+              </h2>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="이름 *">
+                    <input value={editing.name} onChange={(e) => set("name", e.target.value)}
+                      className="field-input" placeholder="예: 김로이" />
+                  </Field>
+                  <Field label="성별">
+                    <select value={editing.gender} onChange={(e) => set("gender", e.target.value as "male" | "female")} className="field-input">
+                      <option value="male">남자</option>
+                      <option value="female">여자</option>
+                    </select>
+                  </Field>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="계열">
+                    <select value={editing.side} onChange={(e) => set("side", e.target.value as Member["side"])} className="field-input">
+                      <option value="paternal">친가</option>
+                      <option value="maternal">외가</option>
+                      <option value="both">친가 & 외가</option>
+                      <option value="paternal_in">친가 (혼인)</option>
+                      <option value="maternal_in">외가 (혼인)</option>
+                    </select>
+                  </Field>
+                  <Field label="역할">
+                    <input value={editing.role} onChange={(e) => set("role", e.target.value)}
+                      className="field-input" placeholder="첫째딸, 사촌 등" />
+                  </Field>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <Field label="출생연도">
+                    <input type="number" value={editing.birthYear ?? ""} onChange={(e) => set("birthYear", e.target.value ? Number(e.target.value) : undefined)}
+                      className="field-input" placeholder="1990" />
+                  </Field>
+                  <Field label="직업">
+                    <input value={editing.occupation ?? ""} onChange={(e) => set("occupation", e.target.value)}
+                      className="field-input" placeholder="교사, 개발자 등" />
+                  </Field>
+                </div>
+                <Field label="관심사 (쉼표로 구분)">
+                  <input value={editing.interests ?? ""} onChange={(e) => set("interests", e.target.value)}
+                    className="field-input" placeholder="독서, 여행, 요리" />
+                </Field>
+                <Field label="소개">
+                  <textarea value={editing.description ?? ""} onChange={(e) => set("description", e.target.value)}
+                    rows={3} className="field-input resize-none" placeholder="가족을 소개해 주세요" />
+                </Field>
+                <Field label="사진 URL">
+                  <input value={editing.photoUrl ?? ""} onChange={(e) => set("photoUrl", e.target.value)}
+                    className="field-input" placeholder="https://..." />
+                </Field>
+                <Field label="부모 ID (쉼표로 구분)">
+                  <input value={editing.parentIds.join(",")} onChange={(e) => set("parentIds", e.target.value ? e.target.value.split(",").map(s => s.trim()) : [])}
+                    className="field-input" placeholder="shingyun,hyeeun" />
+                  <p className="text-xs mt-1" style={{ color: "var(--outline)" }}>
+                    예: {members.slice(0, 3).map(m => m.id).join(", ")}…
                   </p>
-                </div>
-                <div className="flex gap-2">
-                  <button onClick={() => startEdit(m)}
-                    className="px-3 py-1 text-xs rounded-lg font-medium"
-                    style={{ background: "var(--primary-light)", color: "var(--primary)" }}>
-                    수정
+                </Field>
+                <Field label="배우자 ID">
+                  <input value={editing.spouseId ?? ""} onChange={(e) => set("spouseId", e.target.value)}
+                    className="field-input" placeholder="ID 입력" />
+                </Field>
+
+                <div className="flex gap-3 pt-2">
+                  <button onClick={save} disabled={saving}
+                    className="flex-1 py-3 rounded-xl text-white font-bold text-sm transition-opacity"
+                    style={{ background: "var(--primary-btn)", opacity: saving ? 0.7 : 1 }}>
+                    {saving ? "저장 중…" : "저장"}
                   </button>
-                  <button onClick={() => deleteMember(m.id)}
-                    className="px-3 py-1 text-xs rounded-lg font-medium"
-                    style={{ background: "#ffebee", color: "#c62828" }}>
-                    삭제
+                  <button onClick={cancel}
+                    className="px-5 py-3 rounded-xl text-sm font-semibold"
+                    style={{ background: "var(--surface-container-high)", color: "var(--on-surface-variant)" }}>
+                    취소
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className="rounded-2xl p-8 text-center" style={{ background: "var(--surface-container-low)", border: "2px dashed var(--outline-variant)" }}>
+              <span className="material-symbols-outlined text-4xl mb-3 block" style={{ color: "var(--outline-variant)" }}>edit_note</span>
+              <p className="text-sm" style={{ color: "var(--on-surface-variant)" }}>
+                왼쪽 목록에서 수정할 가족을 선택하거나<br />새 가족을 추가하세요.
+              </p>
+            </div>
+          )}
         </div>
       </div>
+
+      <style jsx>{`
+        .field-input {
+          width: 100%;
+          border-radius: 0.75rem;
+          padding: 0.6rem 0.875rem;
+          font-size: 0.875rem;
+          outline: none;
+          border: 1.5px solid var(--outline-variant);
+          background: var(--surface-container-low);
+          color: var(--on-surface);
+          transition: border-color 0.15s;
+        }
+        .field-input:focus {
+          border-color: var(--primary-btn);
+        }
+      `}</style>
     </main>
   );
 }
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="mb-3">
-      <label className="block text-xs font-medium mb-1" style={{ color: "var(--text-muted)" }}>{label}</label>
+    <div>
+      <label className="block text-xs font-semibold mb-1.5 tracking-wide" style={{ color: "var(--on-surface-variant)" }}>{label}</label>
       {children}
     </div>
   );
