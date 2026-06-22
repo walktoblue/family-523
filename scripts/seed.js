@@ -1,15 +1,15 @@
+require('dotenv').config({ path: require('path').join(__dirname, '../.env.local') });
 const { Client } = require('pg');
 const fs = require('fs');
 const path = require('path');
 
-const client = new Client({
-  host: 'aws-1-us-east-1.pooler.supabase.com',
-  port: 6543,
-  database: 'postgres',
-  user: 'postgres.zbxnadgqarloklefhrph',
-  password: 'gCORMflt5ctKf5nq',
-  ssl: { rejectUnauthorized: false }
-});
+const connStr = process.env.DATABASE_URL;
+if (!connStr) {
+  console.error('DATABASE_URL 환경변수가 없습니다. .env.local에 추가해 주세요.');
+  process.exit(1);
+}
+
+const client = new Client({ connectionString: connStr, ssl: { rejectUnauthorized: false } });
 
 const createSQL = `
 CREATE TABLE IF NOT EXISTS public.family_members (
